@@ -10,6 +10,7 @@ import { TrendingUp } from "lucide-react";
 export const StakePage = () => {
     const [selectedPlan, setSelectedPlan] = useState(0);
     const [depositAmount, setDepositAmount] = useState([12.03]);
+    const [depositInput, setDepositInput] = useState("12.03");
     const [investmentDays, setInvestmentDays] = useState([230]);
 
     const plans = [
@@ -56,25 +57,25 @@ export const StakePage = () => {
                             <div className="text-2xl font-bold text-left mb-4">
                                 <input
                                     type="number"
-                                    min={0.01}
+                                    min={0}
                                     max={50}
-                                    step={0.01}
-                                    value={
-                                        depositAmount[0] === 0
-                                            ? ""
-                                            : depositAmount[0]
-                                    }
+                                    step={0.001}
+                                    value={depositInput}
                                     onChange={(e) => {
                                         const val = e.target.value;
-                                        if (val === "") {
-                                            setDepositAmount([0]);
-                                            return;
+                                        setDepositInput(val);
+                                        const num = parseFloat(val);
+                                        if (
+                                            val === "" ||
+                                            val === "0" ||
+                                            (!isNaN(num) &&
+                                                num >= 0 &&
+                                                num <= 50)
+                                        ) {
+                                            setDepositAmount([
+                                                isNaN(num) ? 0 : num,
+                                            ]);
                                         }
-                                        let num = parseFloat(val);
-                                        if (isNaN(num)) num = 0.01;
-                                        if (num < 0.01) num = 0.01;
-                                        if (num > 50) num = 50;
-                                        setDepositAmount([num]);
                                     }}
                                     className="w-24 text-2xl font-bold bg-transparent border-none outline-none text-white text-right"
                                 />
@@ -82,10 +83,13 @@ export const StakePage = () => {
                             </div>
                             <Slider
                                 value={depositAmount}
-                                onValueChange={setDepositAmount}
+                                onValueChange={(val) => {
+                                    setDepositAmount(val);
+                                    setDepositInput(val[0].toString());
+                                }}
                                 max={50}
-                                min={0.01}
-                                step={0.01}
+                                min={0}
+                                step={0.001}
                                 className="w-full"
                             />
                         </div>
