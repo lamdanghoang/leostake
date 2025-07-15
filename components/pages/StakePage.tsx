@@ -8,25 +8,31 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp } from "lucide-react";
 
 export const StakePage = () => {
+    const [selectedPlan, setSelectedPlan] = useState(0);
     const [depositAmount, setDepositAmount] = useState([12.03]);
     const [investmentDays, setInvestmentDays] = useState([230]);
 
     const plans = [
-        { name: "Basic", apy: "3%", selected: true },
-        { name: "Standard", apy: "5%", selected: false },
-        { name: "Premium", apy: "7%", selected: false },
+        { name: "Basic", apy: 0.03 },
+        { name: "Standard", apy: 0.05 },
+        { name: "Premium", apy: 0.07 },
     ];
 
     const calculateRewards = (amount: number, days: number, apy: number) => {
         const daily = (amount * apy) / 365;
         return {
-            day1: (daily * 1).toFixed(2),
-            week1: (daily * 7).toFixed(0),
+            day1: (daily * 1).toFixed(8),
+            week1: (daily * 7).toFixed(6),
             month1: (daily * 30).toFixed(2),
+            custom: (daily * days).toFixed(6),
         };
     };
 
-    const rewards = calculateRewards(depositAmount[0], investmentDays[0], 0.03);
+    const rewards = calculateRewards(
+        depositAmount[0],
+        investmentDays[0],
+        plans[selectedPlan].apy
+    );
 
     return (
         <div className="max-w-6xl mx-auto space-y-8">
@@ -48,13 +54,37 @@ export const StakePage = () => {
 
                         <div className="bg-background rounded-lg p-4 pb-0 relative">
                             <div className="text-2xl font-bold text-left mb-4">
-                                {depositAmount[0].toFixed(2)} BTC
+                                <input
+                                    type="number"
+                                    min={0.01}
+                                    max={50}
+                                    step={0.01}
+                                    value={
+                                        depositAmount[0] === 0
+                                            ? ""
+                                            : depositAmount[0]
+                                    }
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (val === "") {
+                                            setDepositAmount([0]);
+                                            return;
+                                        }
+                                        let num = parseFloat(val);
+                                        if (isNaN(num)) num = 0.01;
+                                        if (num < 0.01) num = 0.01;
+                                        if (num > 50) num = 50;
+                                        setDepositAmount([num]);
+                                    }}
+                                    className="w-24 text-2xl font-bold bg-transparent border-none outline-none text-white text-right"
+                                />
+                                <span className="text-2xl font-bold">BTC</span>
                             </div>
                             <Slider
                                 value={depositAmount}
                                 onValueChange={setDepositAmount}
                                 max={50}
-                                min={1}
+                                min={0.01}
                                 step={0.01}
                                 className="w-full"
                             />
@@ -87,11 +117,16 @@ export const StakePage = () => {
                     {/* Plan Selection */}
                     <div className="mt-4 lg:mt-0 space-y-4 w-full">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            {plans.map((plan) => (
+                            {plans.map((plan, idx) => (
                                 <Button
                                     key={plan.name}
                                     variant="outline"
-                                    className="flex justify-between h-auto px-4 py-3 hover:bg-gray-900"
+                                    className={`flex justify-between h-auto px-4 py-3 hover:bg-gray-900 ${
+                                        selectedPlan === idx
+                                            ? "bg-gray-800"
+                                            : ""
+                                    }`}
+                                    onClick={() => setSelectedPlan(idx)}
                                 >
                                     <div className="flex flex-col items-start text-sm font-medium justify-between">
                                         <span className="text-md text-white">
@@ -102,7 +137,7 @@ export const StakePage = () => {
                                         </div>
                                     </div>
                                     <div className="text-3xl lg:text-5xl font-bold text-sky-400">
-                                        {plan.apy}
+                                        {(plan.apy * 100).toFixed(0)}%
                                     </div>
                                 </Button>
                             ))}
@@ -128,17 +163,22 @@ export const StakePage = () => {
                         <div className="content my-10 text-left">
                             <div>
                                 <p>You'll have it in 24 hours:</p>
-                                <p className="value">+ 1.12 BTC</p>
+                                <p className="value">+ {rewards.day1} BTC</p>
                             </div>
                             <hr />
                             <div>
                                 <p>You'll have it in 1 week:</p>
-                                <p className="value">+ 7.94 BTC</p>
+                                <p className="value">+ {rewards.week1} BTC</p>
                             </div>
                             <hr />
                             <div>
                                 <p>You'll get in 1 month:</p>
-                                <p className="value">+ 19.32 BTC</p>
+                                <p className="value">+ {rewards.month1} BTC</p>
+                            </div>
+                            <hr />
+                            <div>
+                                <p>You'll get in {investmentDays[0]} days:</p>
+                                <p className="value">+ {rewards.custom} BTC</p>
                             </div>
                         </div>
 
