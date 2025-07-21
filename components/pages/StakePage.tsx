@@ -118,6 +118,18 @@ export const StakePage = () => {
                         </div>
                     </div>
 
+                    {/* Platform */}
+                    <div className="p-1.5 w-fit flex items-center gap-1 border rounded-sm bg-gray-800">
+                        <div className="flex justify-end">
+                            <img
+                                src="/bits.svg"
+                                alt="Bits Platform Logo"
+                                className="h-6 w-auto"
+                            />
+                        </div>
+                        <div className="font-semibold text-sm">BITS</div>
+                    </div>
+
                     {/* Plan Selection */}
                     <div className="mt-4 lg:mt-0 space-y-4 w-full">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
