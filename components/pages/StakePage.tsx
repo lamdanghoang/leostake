@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp } from "lucide-react";
 
 export const StakePage = () => {
+    const [selectedPlatform, setSelectedPlatform] = useState("bits");
     const [selectedPlan, setSelectedPlan] = useState(0);
     const [depositAmount, setDepositAmount] = useState([12.03]);
     const [depositInput, setDepositInput] = useState("12.03");
@@ -119,15 +120,43 @@ export const StakePage = () => {
                     </div>
 
                     {/* Platform */}
-                    <div className="p-1.5 w-fit flex items-center gap-1 border rounded-sm bg-gray-800">
-                        <div className="flex justify-end">
-                            <img
-                                src="/bits.svg"
-                                alt="Bits Platform Logo"
-                                className="h-6 w-auto"
-                            />
+                    <div className="flex items-center gap-2">
+                        <div
+                            className={`p-1.5 w-fit flex items-center gap-1 border rounded-sm ${
+                                selectedPlatform === "bits"
+                                    ? "bg-gray-800"
+                                    : "bg-background"
+                            } cursor-pointer`}
+                            onClick={() => setSelectedPlatform("bits")}
+                        >
+                            <div className="flex justify-end">
+                                <img
+                                    src="/bits.svg"
+                                    alt="Bits Platform Logo"
+                                    className="h-6 w-auto"
+                                />
+                            </div>
+                            <div className="font-semibold text-sm">BITS</div>
                         </div>
-                        <div className="font-semibold text-sm">BITS</div>
+                        <div
+                            className={`p-1.5 w-fit flex items-center gap-1 border rounded-sm ${
+                                selectedPlatform === "vault-layer"
+                                    ? "bg-gray-800"
+                                    : "bg-background"
+                            } cursor-pointer`}
+                            onClick={() => setSelectedPlatform("vault-layer")}
+                        >
+                            <div className="flex justify-end">
+                                <img
+                                    src="/vault-layer.svg"
+                                    alt="VaultLayer Platform Logo"
+                                    className="h-6 w-auto"
+                                />
+                            </div>
+                            <div className="font-semibold text-sm">
+                                VaultLayer
+                            </div>
+                        </div>
                     </div>
 
                     {/* Plan Selection */}
@@ -137,7 +166,7 @@ export const StakePage = () => {
                                 <Button
                                     key={plan.name}
                                     variant="outline"
-                                    className={`flex justify-between h-auto px-4 py-3 hover:bg-gray-900 ${
+                                    className={`flex justify-between h-auto px-4 py-3 hover:bg-gray-900 cursor-pointer ${
                                         selectedPlan === idx
                                             ? "bg-gray-800"
                                             : ""
