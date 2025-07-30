@@ -3,29 +3,22 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import {
-    Bitcoin,
-    TrendingUp,
-    Wallet,
-    BarChart3,
-    Settings,
-    Menu,
-    X,
-} from "lucide-react";
+import { Bitcoin, TrendingUp, Wallet, Settings, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import BankIcon from "../icons/Bank";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const Navigation = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = usePathname();
 
     const navItems = [
-        { href: "/", label: "Dashboard", icon: BarChart3 },
-        { href: "/stake", label: "Stake", icon: TrendingUp },
-        { href: "/confirm", label: "Confirm", icon: Wallet },
-        { href: "/unstake", label: "Unstake", icon: Settings },
-        { href: "/plan", label: "Plan", icon: Bitcoin },
+        // { href: "/", label: "Dashboard", icon: BarChart3 },
+        { href: "/", label: "Stake", icon: TrendingUp },
+        { href: "#", label: "Confirm", icon: Wallet },
+        { href: "#", label: "Unstake", icon: Settings },
+        { href: "#", label: "Plan", icon: Bitcoin },
     ];
 
     return (
@@ -43,13 +36,13 @@ export const Navigation = () => {
                     {/* Desktop navigation */}
                     <div className="hidden md:block">
                         <div className="flex items-center space-x-1">
-                            {navItems.map((item) => {
+                            {navItems.map((item, index) => {
                                 const Icon = item.icon;
                                 const isActive = location === item.href;
 
                                 return (
                                     <Link
-                                        key={item.href}
+                                        key={index}
                                         href={item.href}
                                         className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-smooth ${
                                             isActive
@@ -69,12 +62,7 @@ export const Navigation = () => {
 
                     {/* Right side - Wallet connect */}
                     <div className="hidden md:block">
-                        <div className="flex items-center space-x-2 bg-card rounded-lg px-3 py-2 border border-border">
-                            <Bitcoin className="h-4 w-4 text-accent" />
-                            <span className="text-sm text-foreground font-mono">
-                                BEX030...210023
-                            </span>
-                        </div>
+                        <ConnectButton />
                     </div>
 
                     {/* Mobile menu button */}
@@ -119,13 +107,9 @@ export const Navigation = () => {
                                 </Link>
                             );
                         })}
+                        {/* Wallet connect */}
                         <div className="pt-4 pb-2 px-3">
-                            <div className="flex items-center space-x-2 bg-card rounded-lg px-3 py-2 border border-border">
-                                <Bitcoin className="h-4 w-4 text-accent" />
-                                <span className="text-sm text-foreground font-mono">
-                                    BEX030...210023
-                                </span>
-                            </div>
+                            <ConnectButton />
                         </div>
                     </div>
                 </div>

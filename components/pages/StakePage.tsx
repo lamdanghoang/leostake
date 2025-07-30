@@ -10,8 +10,8 @@ import { TrendingUp } from "lucide-react";
 export const StakePage = () => {
     const [selectedPlatform, setSelectedPlatform] = useState("bits");
     const [selectedPlan, setSelectedPlan] = useState(0);
-    const [depositAmount, setDepositAmount] = useState([12.03]);
-    const [depositInput, setDepositInput] = useState("12.03");
+    const [depositAmount, setDepositAmount] = useState([100]);
+    const [depositInput, setDepositInput] = useState("100");
     const [investmentDays, setInvestmentDays] = useState([230]);
 
     const plans = [
@@ -59,7 +59,7 @@ export const StakePage = () => {
                                 <input
                                     type="number"
                                     min={0}
-                                    max={50}
+                                    max={5000}
                                     step={0.001}
                                     value={depositInput}
                                     onChange={(e) => {
@@ -71,7 +71,7 @@ export const StakePage = () => {
                                             val === "0" ||
                                             (!isNaN(num) &&
                                                 num >= 0 &&
-                                                num <= 50)
+                                                num <= 5000)
                                         ) {
                                             setDepositAmount([
                                                 isNaN(num) ? 0 : num,
@@ -80,7 +80,7 @@ export const StakePage = () => {
                                     }}
                                     className="w-24 text-2xl font-bold bg-transparent border-none outline-none text-white text-right"
                                 />
-                                <span className="text-2xl font-bold">BTC</span>
+                                <span className="text-2xl font-bold">CORE</span>
                             </div>
                             <Slider
                                 value={depositAmount}
@@ -88,9 +88,9 @@ export const StakePage = () => {
                                     setDepositAmount(val);
                                     setDepositInput(val[0].toString());
                                 }}
-                                max={50}
+                                max={5000}
                                 min={0}
-                                step={0.001}
+                                step={0.1}
                                 className="w-full"
                             />
                         </div>
@@ -208,22 +208,22 @@ export const StakePage = () => {
                         <div className="content my-10 text-left">
                             <div>
                                 <p>You'll have it in 24 hours:</p>
-                                <p className="value">+ {rewards.day1} BTC</p>
+                                <p className="value">+ {rewards.day1} CORE</p>
                             </div>
                             <hr />
                             <div>
                                 <p>You'll have it in 1 week:</p>
-                                <p className="value">+ {rewards.week1} BTC</p>
+                                <p className="value">+ {rewards.week1} CORE</p>
                             </div>
                             <hr />
                             <div>
                                 <p>You'll get in 1 month:</p>
-                                <p className="value">+ {rewards.month1} BTC</p>
+                                <p className="value">+ {rewards.month1} CORE</p>
                             </div>
                             <hr />
                             <div>
                                 <p>You'll get in {investmentDays[0]} days:</p>
-                                <p className="value">+ {rewards.custom} BTC</p>
+                                <p className="value">+ {rewards.custom} CORE</p>
                             </div>
                         </div>
 
