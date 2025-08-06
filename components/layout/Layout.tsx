@@ -6,11 +6,11 @@ import { http, WagmiProvider } from "wagmi";
 import { coreTestnet2 } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-    darkTheme,
     getDefaultConfig,
     lightTheme,
     RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
+import { Toaster } from "@/components/ui/sonner";
 
 const config = getDefaultConfig({
     appName: "CoreBank",
@@ -45,6 +45,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                             {children}
                         </main>
                     </div>
+                    <Toaster />
                 </RainbowKitProvider>
             </QueryClientProvider>
         </WagmiProvider>

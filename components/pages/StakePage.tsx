@@ -1,18 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp } from "lucide-react";
+import { useDeposit } from "@/hooks/useContract";
+import { toast } from "sonner";
+import { formatTransaction, slice } from "viem";
 
 export const StakePage = () => {
     const [selectedPlatform, setSelectedPlatform] = useState("bits");
     const [selectedPlan, setSelectedPlan] = useState(0);
-    const [depositAmount, setDepositAmount] = useState([100]);
-    const [depositInput, setDepositInput] = useState("100");
+    const [depositAmount, setDepositAmount] = useState([1]);
+    const [depositInput, setDepositInput] = useState("1.0");
     const [investmentDays, setInvestmentDays] = useState([230]);
+    const { depositFund, hash, isPending, isConfirmed } = useDeposit();
 
     const plans = [
         { name: "Basic", apy: 0.03 },
@@ -35,6 +38,19 @@ export const StakePage = () => {
         investmentDays[0],
         plans[selectedPlan].apy
     );
+
+    const stakeHandler = () => {
+        if (!depositInput) return;
+
+        depositFund(depositInput);
+    };
+
+    useEffect(() => {
+        if (isConfirmed && hash)
+            toast("Your transaction confirmed!", {
+                description: `Txn: ${slice(hash, 0, 5)}`,
+            });
+    }, [isConfirmed]);
 
     return (
         <div className="max-w-6xl mx-auto space-y-8">
@@ -59,8 +75,8 @@ export const StakePage = () => {
                                 <input
                                     type="number"
                                     min={0}
-                                    max={5000}
-                                    step={0.001}
+                                    max={10}
+                                    step={0.1}
                                     value={depositInput}
                                     onChange={(e) => {
                                         const val = e.target.value;
@@ -71,7 +87,7 @@ export const StakePage = () => {
                                             val === "0" ||
                                             (!isNaN(num) &&
                                                 num >= 0 &&
-                                                num <= 5000)
+                                                num <= 10)
                                         ) {
                                             setDepositAmount([
                                                 isNaN(num) ? 0 : num,
@@ -88,7 +104,7 @@ export const StakePage = () => {
                                     setDepositAmount(val);
                                     setDepositInput(val[0].toString());
                                 }}
-                                max={5000}
+                                max={10}
                                 min={0}
                                 step={0.1}
                                 className="w-full"
@@ -239,6 +255,17 @@ export const StakePage = () => {
                             <span />
                         </div>
                     </div>
+                </div>
+
+                {/* Stake button */}
+                <div className="col-span-3">
+                    <Button
+                        className="gradient-accent hover:opacity-90 cursor-pointer"
+                        disabled={isPending}
+                        onClick={() => stakeHandler()}
+                    >
+                        Stake Now
+                    </Button>
                 </div>
             </div>
         </div>
